@@ -147,5 +147,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     setTimeout(type, 1000);
   }
+  // ── HAMBURGER MENU ────────────────────────────────────
+  const hamburger  = document.getElementById('hamburger');
+  const mobileNav  = document.getElementById('mobileNav');
+
+  hamburger?.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileNav.classList.toggle('open');
+    document.body.style.overflow =
+      mobileNav.classList.contains('open') ? 'hidden' : '';
+  });
+
+  window.closeMobileNav = () => {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+    document.body.style.overflow = '';
+  };
 
 });
