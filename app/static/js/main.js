@@ -23,16 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.body.style.overflow = 'hidden';
 
-  // ── SCROLL PROGRESS BAR ───────────────────────────────────
-  const progressLine = document.createElement('div');
-  progressLine.className = 'progress-line';
-  document.body.prepend(progressLine);
-
-  window.addEventListener('scroll', () => {
-    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-    progressLine.style.width = (pct * 100) + '%';
-  });
-
   // ── SCROLL REVEAL ─────────────────────────────────────────
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -43,7 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── HERO REVEAL ───────────────────────────────────────────
   function revealHero() {
     document.querySelector('.hero-name')?.classList.add('visible');
-    document.querySelectorAll('.hero-tagline, .hero-subtitle, .hero-cta, .hero-stats')
+
+    // FIX: added .motto-card so it animates in with the rest
+    document.querySelectorAll('.hero-tagline, .hero-subtitle, .hero-cta, .motto-card, .hero-stats')
       .forEach((el, i) => {
         setTimeout(() => {
           el.style.opacity = '1';
@@ -52,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  document.querySelectorAll('.hero-tagline, .hero-subtitle, .hero-cta, .hero-stats')
+  // FIX: added .motto-card to initial hidden state
+  document.querySelectorAll('.hero-tagline, .hero-subtitle, .hero-cta, .motto-card, .hero-stats')
     .forEach(el => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(20px)';
@@ -92,17 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ── ACTIVE NAV HIGHLIGHT ──────────────────────────────────
+  // FIX: removed dead first observer that called .observe with no argument
   const navLinks = document.querySelectorAll('.nav-links a');
-  new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        navLinks.forEach(a => {
-          a.style.color = '';
-          if (a.getAttribute('href') === '#' + e.target.id) a.style.color = 'var(--accent)';
-        });
-      }
-    });
-  }, { threshold: 0.5 }).observe;
 
   document.querySelectorAll('section[id]').forEach(s => {
     new IntersectionObserver((entries) => {
@@ -110,8 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.isIntersecting) {
           navLinks.forEach(a => {
             a.style.color = '';
-            if (a.getAttribute('href') === '#' + e.target.id ||
-                a.getAttribute('href') === '/#' + e.target.id) {
+            if (
+              a.getAttribute('href') === '#'  + e.target.id ||
+              a.getAttribute('href') === '/#' + e.target.id
+            ) {
               a.style.color = 'var(--accent)';
             }
           });
@@ -138,30 +124,63 @@ document.addEventListener('DOMContentLoaded', () => {
       const word = words[wordIdx];
       if (deleting) {
         typingEl.textContent = word.substring(0, charIdx--);
-        if (charIdx < 0) { deleting = false; wordIdx = (wordIdx + 1) % words.length; setTimeout(type, 400); return; }
+        if (charIdx < 0) {
+          deleting = false;
+          wordIdx = (wordIdx + 1) % words.length;
+          setTimeout(type, 400);
+          return;
+        }
       } else {
         typingEl.textContent = word.substring(0, charIdx++);
-        if (charIdx > word.length) { deleting = true; setTimeout(type, 1800); return; }
+        if (charIdx > word.length) {
+          deleting = true;
+          setTimeout(type, 1800);
+          return;
+        }
       }
       setTimeout(type, deleting ? 60 : 100);
     }
     setTimeout(type, 1000);
   }
-  // ── HAMBURGER MENU ────────────────────────────────────
-  const hamburger  = document.getElementById('hamburger');
-  const mobileNav  = document.getElementById('mobileNav');
+
+  // ── HAMBURGER MENU ────────────────────────────────────────
+  const hamburger   = document.getElementById('hamburger');
+  const mobileNav   = document.getElementById('mobileNav');
+  const mobileClose = document.getElementById('mobileNavClose');
+  const iconMenu    = hamburger?.querySelector('.icon-menu');
+  const iconClose   = hamburger?.querySelector('.icon-close');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-item');
+
+  function openNav() {
+    mobileNav.classList.add('open');
+    iconMenu.style.display  = 'none';
+    iconClose.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeNav() {
+    mobileNav.classList.remove('open');
+    iconMenu.style.display  = 'block';
+    iconClose.style.display = 'none';
+    document.body.style.overflow = '';
+  }
 
   hamburger?.addEventListener('click', () => {
-    hamburger.classList.toggle('open');
-    mobileNav.classList.toggle('open');
-    document.body.style.overflow =
-      mobileNav.classList.contains('open') ? 'hidden' : '';
+    mobileNav.classList.contains('open') ? closeNav() : openNav();
   });
 
-  window.closeMobileNav = () => {
-    hamburger.classList.remove('open');
-    mobileNav.classList.remove('open');
-    document.body.style.overflow = '';
-  };
+  mobileClose?.addEventListener('click', closeNav);
+
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', closeNav);
+  });
+
+  mobileNav?.addEventListener('click', (e) => {
+    if (e.target === mobileNav) closeNav();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeNav();
+  });
 
 });

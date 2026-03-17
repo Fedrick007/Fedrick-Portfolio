@@ -33,19 +33,44 @@
     </ul>
     <!-- Hamburger button (mobile only) -->
     <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+  <!-- Hamburger icon -->
+  <svg class="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <line x1="3" y1="6"  x2="21" y2="6"  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+  <!-- X close icon -->
+  <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none;">
+    <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="20" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+</button>
   </nav>
 
   <!-- Mobile nav drawer -->
-  <div class="mobile-nav" id="mobileNav">
-    <a href="#about"      onclick="closeMobileNav()">About</a>
-    <a href="#projects"   onclick="closeMobileNav()">Work</a>
-    <a href="#experience" onclick="closeMobileNav()">Experience</a>
-    <a href="/contact"    onclick="closeMobileNav()">Contact</a>
+<div class="mobile-nav" id="mobileNav">
+  <!-- Close button inside drawer -->
+  <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+      <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="20" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <nav class="mobile-nav-links">
+    <a href="/#about"      class="mobile-nav-item" id="mnAbout">About</a>
+    <a href="/#projects"   class="mobile-nav-item" id="mnWork">Work</a>
+    <a href="/#experience" class="mobile-nav-item" id="mnExp">Experience</a>
+    <a href="/contact"     class="mobile-nav-item" id="mnContact">Contact</a>
+  </nav>
+
+  <!-- Bottom socials -->
+  <div class="mobile-nav-socials">
+    <a href="{{ data.github }}"   target="_blank">GitHub</a>
+    <a href="{{ data.linkedin }}" target="_blank">LinkedIn</a>
+    <a href="{{ data.twitter }}"  target="_blank">Twitter</a>
   </div>
+</div>
   </nav>
 
   <!-- HERO -->
@@ -53,17 +78,30 @@
 
     <div class="hero-bg-number">{{ data.name.split()[0][0] }}</div>
 
-    <!-- LEFT -->
-    <!-- LEFT -->
 <div class="hero-left">
 
-  <!-- Tagline stays on top -->
-  <div class="hero-tagline">
-    &nbsp; Available for projects &nbsp;&nbsp; {{ data.location }}
-  </div>
+  <!-- Tagline FIRST -->
+<div class="hero-tagline">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
+    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/>
+  </svg>
+  Available for projects
+  <span class="tagline-divider">✦</span>
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    <circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+  </svg>
+  {{ data.location }}
+</div>
 
-  <!-- Name + Image side by side -->
+  <!-- Name row: avatar beside name on desktop, avatar above on mobile -->
   <div class="hero-name-row">
+    <h1 class="hero-name">
+      <span class="line"><span>{{ data.name.split()[0] }}</span></span>
+      <span class="line"><span><em>{{ data.name.split()[1] }}</em></span></span>
+    </h1>
+
     <div class="profile-avatar">
       <img
         src="{{ url_for('static', filename='img/fedrick.jpg') }}"
@@ -72,15 +110,8 @@
       >
       <div class="profile-avatar-ring"></div>
     </div>
-    <h1 class="hero-name">
-      <span class="line"><span>{{ data.name.split()[0] }}</span></span>
-      <span class="line"><span><em>{{ data.name.split()[1] }}</em></span></span>
-    </h1>
-
-    
   </div>
 
-  <!-- Subtitle and CTA below -->
   <p class="hero-subtitle">
     <span class="typing-text">Developer</span> &mdash; {{ data.bio }}
   </p>
@@ -96,26 +127,47 @@
 
     <!-- RIGHT -->
     <div class="hero-right">
-      <div class="hero-stats">
-        <div class="hero-stats-title">Quick Stats</div>
-        <div class="stat-item">
-          <span class="stat-num" data-target="1" data-suffix="+">0+</span>
-          <span class="stat-label">Years Exp</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num" data-target="{{ data.projects|length }}" data-suffix="+">0+</span>
-          <span class="stat-label">Projects</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num" data-target="20" data-suffix="+">0+</span>
-          <span class="stat-label">Technologies</span>
-        </div>
-        <div class="stat-item">
-          <span class="stat-num" data-target="100" data-suffix="%">0%</span>
-          <span class="stat-label">Dedication</span>
-        </div>
-      </div>
+
+  <!-- Motto / Fun Facts card -->
+  <div class="motto-card">
+<div class="motto-card-label">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+    <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Favourite Quote
+</div>  <blockquote class="motto-quote">
+    "{{ data.motto.quote }}"
+  </blockquote>
+  <cite class="motto-author">— {{ data.motto.author }}</cite>
+</div>
+
+  <!-- Quick Stats -->
+  <div class="hero-stats">
+<div class="hero-stats-title">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+    <path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  Quick Stats
+</div>    <div class="stat-item">
+      <span class="stat-num" data-target="1" data-suffix="+">0+</span>
+      <span class="stat-label">Years Exp.</span>
     </div>
+    <div class="stat-item">
+      <span class="stat-num" data-target="{{ data.projects|length }}" data-suffix="+">0+</span>
+      <span class="stat-label">Projects</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-target="20" data-suffix="+">0+</span>
+      <span class="stat-label">Technologies</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num" data-target="100" data-suffix="%">0%</span>
+      <span class="stat-label">Dedication</span>
+    </div>
+  </div>
+
+</div>
 
     <!-- MARQUEE -->
     <div class="hero-marquee-wrap">

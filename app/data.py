@@ -118,4 +118,8 @@ portfolio = {
             ),
         },
     ],
+    "motto": {
+    "quote":  "Intelligence plus character - that is the goal...",
+    "author": "Martin Luther King Jr.",
+},
 }
