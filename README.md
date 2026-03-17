@@ -220,6 +220,6 @@ This project is open source and available under the [MIT License](LICENSE).
 ## Author
 
 **Fedrick Samuel W**
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- LinkedIn: [linkedin.com/in/YOUR_PROFILE](https://linkedin.com/in/YOUR_PROFILE)
+- GitHub: [@YOUR_USERNAME](https://github.com/Fedrick007)
+- LinkedIn: [linkedin.com/in/YOUR_PROFILE](https://linkedin.com/in/fedricksamuel)
 - Portfolio: [fedrick-portfolio.onrender.com](https://fedrick-portfolio.onrender.com)
