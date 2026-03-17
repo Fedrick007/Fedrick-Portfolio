@@ -1,0 +1,51 @@
+# ── Python ──────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+.installed.cfg
+lib/
+lib64/
+
+# ── Virtual Environment ──────────────────
+venv/
+env/
+ENV/
+.env/
+.venv/
+
+# ── Environment Variables (NEVER commit) ─
+.env
+*.env
+.env.local
+.env.production
+
+# ── Flask / App secrets ──────────────────
+instance/
+*.cfg
+
+# ── IDE & OS ─────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ─────────────────────────────────
+*.log
+logs/

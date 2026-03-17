@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — {{ data.name }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <style>
+    /* ── Contact page overrides ── */
+    body { cursor: default; min-height: 100vh; }
+
+    .contact-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* Left panel */
+    .cp-left {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      padding: 120px 64px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .cp-back {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 64px;
+      transition: color 0.2s;
+    }
+    .cp-back:hover { color: var(--accent); }
+
+    .cp-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      line-height: 0.95;
+      margin-bottom: 28px;
+    }
+    .cp-heading em { font-style: italic; color: var(--accent); }
+
+    .cp-sub {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.7;
+      max-width: 360px;
+      margin-bottom: 48px;
+    }
+
+    .cp-info-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .cp-info-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      min-width: 60px;
+    }
+
+    .cp-info-val {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text);
+    }
+
+    /* Right panel — form */
+    .cp-right {
+      padding: 120px 64px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .form-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .form-group {
+      margin-bottom: 32px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      padding: 16px 20px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      resize: none;
+      display: block;
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      background: var(--bg3);
+    }
+
+    .form-textarea { height: 160px; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .btn-send {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--bg);
+      background: var(--accent);
+      border: none;
+      padding: 18px 40px;
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+      transition: background 0.2s, transform 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-send:hover {
+      background: #f5ff7a;
+      transform: translateY(-2px);
+    }
+    .btn-send:active { transform: translateY(0); }
+
+    /* Flash messages */
+    .flash-list { list-style: none; margin-bottom: 28px; }
+
+    .flash-msg {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      padding: 14px 20px;
+      border-left: 3px solid;
+      margin-bottom: 10px;
+    }
+
+    .flash-msg.success {
+      background: rgba(168, 230, 207, 0.08);
+      border-color: #A8E6CF;
+      color: #A8E6CF;
+    }
+
+    .flash-msg.error {
+      background: rgba(255, 87, 87, 0.08);
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+
+    /* Responsive */
+    @media (max-width: 800px) {
+      .contact-page { grid-template-columns: 1fr; }
+      .cp-left  { padding: 100px 24px 48px; border-right: none; border-bottom: 1px solid var(--border); }
+      .cp-right { padding: 48px 24px 80px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimal nav -->
+  <nav>
+    <a href="/" class="nav-logo">{{ data.name.split()[0][0] }}{{ data.name.split()[1][0] }}.dev</a>
+    <ul class="nav-links">
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#projects">Work</a></li>
+      <li><a href="/#experience">Experience</a></li>
+      <li><a href="/contact" style="color:var(--accent)">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="contact-page">
+
+    <!-- LEFT — Info panel -->
+    <div class="cp-left">
+      <a href="/" class="cp-back">← Back to portfolio</a>
+
+      <h1 class="cp-heading">
+        Say<br><em>Hello.</em>
+      </h1>
+
+      <p class="cp-sub">
+        Have a project in mind, a problem to solve, or just want to connect? Drop me a message and I'll reply within 24 hours.
+      </p>
+
+      <div class="cp-info-row">
+        <span class="cp-info-label">Email</span>
+        <span class="cp-info-val">{{ data.email }}</span>
+      </div>
+      <div class="cp-info-row">
+        <span class="cp-info-label">Location</span>
+        <span class="cp-info-val">{{ data.location }}</span>
+      </div>
+      <div class="cp-info-row">
+        <span class="cp-info-label">Status</span>
+        <span class="cp-info-val" style="color:var(--accent)">● Available for work</span>
+      </div>
+    </div>
+
+    <!-- RIGHT — Form -->
+    <div class="cp-right">
+
+      <!-- Flash messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class="flash-list">
+            {% for category, message in messages %}
+              <li class="flash-msg {{ category }}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" action="/contact" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="name">Your Name</label>
+            <input
+              class="form-input"
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Name"
+              value="{{ form_data.name if form_data else '' }}"
+              required
+            >
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email Address</label>
+            <input
+              class="form-input"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="yourgmail@example.com"
+              value="{{ form_data.email if form_data else '' }}"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea
+            class="form-textarea"
+            id="message"
+            name="message"
+            placeholder="Tell me about your project or just say hi..."
+            required
+          >{{ form_data.message if form_data else '' }}</textarea>
+        </div>
+
+        <button type="submit" class="btn-send">
+          Send Message &nbsp; →
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
