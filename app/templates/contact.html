@@ -4,241 +4,288 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — {{ data.name }}</title>
+  <!-- Favicon: Code brackets monogram -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306060c'/%3E%3Cpath d='M11 10L6 16l5 6' stroke='%2300E5FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M21 10l5 6-5 6' stroke='%23BF5FFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M18 9l-4 14' stroke='%23FF4D8D' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ── Contact page overrides ── */
-    body { cursor: default; min-height: 100vh; }
-
-    .contact-page {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    /* Contact-page–specific overrides */
+    .contact-page-wrap{
+      min-height:calc(100vh - var(--nav-h) - 68px); /* subtract nav + footer */
+      margin-top:var(--nav-h);
+      display:grid;
+      grid-template-columns:1fr 1fr;
     }
 
     /* Left panel */
-    .cp-left {
-      background: var(--bg2);
-      border-right: 1px solid var(--border);
-      padding: 120px 64px 80px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    .cp-left{
+      background:var(--bg2);border-right:1px solid var(--border);
+      padding:80px 64px;display:flex;flex-direction:column;justify-content:center;
+      position:relative;overflow:hidden;
+    }
+    .cp-left::before{
+      content:'';position:absolute;top:-20%;left:-20%;width:60%;height:60%;
+      background:radial-gradient(ellipse,rgba(0,229,255,.055) 0%,rgba(191,95,255,.03) 50%,transparent 70%);
+      pointer-events:none;
     }
 
-    .cp-back {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 64px;
-      transition: color 0.2s;
+    .cp-back{
+      font-family:var(--font-mono);font-size:.68rem;color:var(--text-muted);
+      letter-spacing:.15em;text-transform:uppercase;text-decoration:none;
+      display:inline-flex;align-items:center;gap:10px;margin-bottom:56px;
+      transition:color .25s,gap .3s var(--ease);position:relative;z-index:1;
     }
-    .cp-back:hover { color: var(--accent); }
+    .cp-back:hover{color:var(--cyan);gap:14px;}
 
-    .cp-heading {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      font-weight: 900;
-      line-height: 0.95;
-      margin-bottom: 28px;
+    .cp-heading{
+      font-family:var(--font-serif);font-size:clamp(2.8rem,5vw,5rem);
+      font-weight:600;line-height:.95;margin-bottom:24px;position:relative;z-index:1;
     }
-    .cp-heading em { font-style: italic; color: var(--accent); }
-
-    .cp-sub {
-      color: var(--text-muted);
-      font-size: 1.1rem;
-      font-style: italic;
-      line-height: 1.7;
-      max-width: 360px;
-      margin-bottom: 48px;
+    .cp-heading em{
+      font-style:italic;
+      background:linear-gradient(135deg,var(--cyan),var(--violet));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     }
 
-    .cp-info-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
+    .cp-sub{
+      color:var(--text-muted);font-size:1.08rem;font-style:italic;
+      line-height:1.75;max-width:380px;margin-bottom:48px;
+      font-family:var(--font-serif);position:relative;z-index:1;
     }
 
-    .cp-info-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      min-width: 60px;
+    .cp-info-row{
+      display:flex;align-items:flex-start;gap:14px;margin-bottom:18px;
+      position:relative;z-index:1;
+    }
+    .cp-info-icon{flex-shrink:0;margin-top:3px;}
+    .cp-info-icon svg{color:var(--cyan);}
+    .cp-info-inner{display:flex;flex-direction:column;gap:3px;}
+    .cp-info-label{font-family:var(--font-mono);font-size:.58rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.15em;}
+    .cp-info-val{font-family:var(--font-serif);font-size:1rem;color:var(--text);}
+    .cp-info-val a{color:var(--cyan);text-decoration:none;}
+    .cp-info-val a:hover{text-decoration:underline;}
+
+    /* Social strip inside contact left */
+    .cp-socials{
+      display:flex;gap:10px;margin-top:40px;position:relative;z-index:1;
+    }
+    .cp-social-link{
+      display:flex;align-items:center;justify-content:center;
+      width:42px;height:42px;border:1px solid var(--border);color:var(--text-muted);
+      text-decoration:none;position:relative;overflow:hidden;
+      transition:color .3s,border-color .3s,transform .3s var(--ease);
+    }
+    .cp-social-link::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,var(--cyan),var(--violet));
+      transform:scaleY(0);transform-origin:bottom;transition:transform .3s var(--ease);z-index:0;
+    }
+    .cp-social-link svg{position:relative;z-index:1;}
+    .cp-social-link:hover::before{transform:scaleY(1);}
+    .cp-social-link:hover{color:#06060c;border-color:var(--cyan);transform:translateY(-3px);}
+
+    /* Right panel */
+    .cp-right{
+      padding:80px 64px;display:flex;flex-direction:column;justify-content:center;
     }
 
-    .cp-info-val {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      color: var(--text);
+    .form-title{
+      font-family:var(--font-serif);font-size:1.3rem;font-weight:600;
+      color:var(--text);margin-bottom:32px;
+      display:flex;align-items:center;gap:14px;
     }
+    .form-title::after{content:'';flex:1;height:1px;background:var(--border-a);}
 
-    /* Right panel — form */
-    .cp-right {
-      padding: 120px 64px 80px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+    .form-label{
+      font-family:var(--font-mono);font-size:.6rem;
+      color:var(--cyan);letter-spacing:.25em;text-transform:uppercase;
+      display:block;margin-bottom:9px;
     }
+    .form-group{margin-bottom:24px;}
 
-    .form-label {
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      color: var(--text-dim);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: 8px;
+    .form-input,.form-textarea{
+      width:100%;background:var(--bg3);border:1px solid var(--border);
+      color:var(--text);font-family:var(--font-serif);font-size:1rem;
+      padding:15px 18px;outline:none;
+      transition:border-color .3s,background .3s;resize:none;display:block;
+      -webkit-appearance:none;
     }
+    .form-input::placeholder,.form-textarea::placeholder{color:var(--text-dim);font-style:italic;}
+    .form-input:focus,.form-textarea:focus{border-color:var(--cyan);background:var(--bg4);}
+    .form-textarea{height:150px;}
 
-    .form-group {
-      margin-bottom: 32px;
-    }
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
 
-    .form-input,
-    .form-textarea {
-      width: 100%;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-size: 1rem;
-      padding: 16px 20px;
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-      resize: none;
-      display: block;
+    .btn-send{
+      font-family:var(--font-mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+      color:#06060c;
+      background:linear-gradient(135deg,var(--cyan) 0%,var(--violet) 100%);
+      border:none;padding:17px 42px;cursor:pointer;
+      clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+      transition:transform .3s var(--ease),box-shadow .3s;
+      display:inline-flex;align-items:center;gap:12px;
+      position:relative;overflow:hidden;
     }
-
-    .form-input::placeholder,
-    .form-textarea::placeholder {
-      color: var(--text-dim);
-      font-style: italic;
-    }
-
-    .form-input:focus,
-    .form-textarea:focus {
-      border-color: var(--accent);
-      background: var(--bg3);
-    }
-
-    .form-textarea { height: 160px; }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-    }
-
-    .btn-send {
-      font-family: var(--font-mono);
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--bg);
-      background: var(--accent);
-      border: none;
-      padding: 18px 40px;
-      cursor: pointer;
-      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
-      transition: background 0.2s, transform 0.15s;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .btn-send:hover {
-      background: #f5ff7a;
-      transform: translateY(-2px);
-    }
-    .btn-send:active { transform: translateY(0); }
+    .btn-send::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.18);opacity:0;transition:opacity .3s;}
+    .btn-send:hover{transform:translateY(-3px);box-shadow:0 12px 36px rgba(0,229,255,.28);}
+    .btn-send:hover::before{opacity:1;}
+    .btn-send:active{transform:translateY(0);}
 
     /* Flash messages */
-    .flash-list { list-style: none; margin-bottom: 28px; }
-
-    .flash-msg {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      letter-spacing: 0.05em;
-      padding: 14px 20px;
-      border-left: 3px solid;
-      margin-bottom: 10px;
+    .flash-list{list-style:none;margin-bottom:24px;}
+    .flash-msg{
+      font-family:var(--font-mono);font-size:.7rem;letter-spacing:.04em;
+      padding:13px 18px;border-left:2px solid;margin-bottom:10px;
     }
+    .flash-msg.success{background:rgba(0,229,176,.07);border-color:var(--teal);color:var(--teal);}
+    .flash-msg.error{background:rgba(255,77,141,.07);border-color:var(--rose);color:var(--rose);}
 
-    .flash-msg.success {
-      background: rgba(168, 230, 207, 0.08);
-      border-color: #A8E6CF;
-      color: #A8E6CF;
-    }
-
-    .flash-msg.error {
-      background: rgba(255, 87, 87, 0.08);
-      border-color: var(--accent2);
-      color: var(--accent2);
-    }
-
-    /* Responsive */
-    @media (max-width: 800px) {
-      .contact-page { grid-template-columns: 1fr; }
-      .cp-left  { padding: 100px 24px 48px; border-right: none; border-bottom: 1px solid var(--border); }
-      .cp-right { padding: 48px 24px 80px; }
-      .form-row { grid-template-columns: 1fr; }
+    @media(max-width:860px){
+      .contact-page-wrap{grid-template-columns:1fr;min-height:auto;}
+      .cp-left{padding:60px 28px 44px;border-right:none;border-bottom:1px solid var(--border);}
+      .cp-right{padding:44px 28px 60px;}
+      .form-row{grid-template-columns:1fr;}
     }
   </style>
 </head>
 <body>
 
-  <!-- Minimal nav -->
-  <nav>
-    <a href="/" class="nav-logo">{{ data.name.split()[0][0] }}{{ data.name.split()[1][0] }}.dev</a>
+  <!-- NAVIGATION (same as index) -->
+  <nav id="navbar" class="scrolled">
+    <a href="{{ url_for('main.index') }}#hero" class="nav-logo">
+      <span class="nav-logo-dot"></span>
+      {{ data.name.split()[0][0] }}{{ data.name.split()[1][0] }}<span style="color:var(--cyan);opacity:.5">.dev</span>
+    </a>
     <ul class="nav-links">
+      <li>
+        <a href="{{ url_for('main.index') }}#hero" class="nav-home-btn" aria-label="Home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </li>
       <li><a href="/#about">About</a></li>
-      <li><a href="/#projects">Work</a></li>
+      <li><a href="/#skills">Skills</a></li>
+      <li><a href="/projects">Projects</a></li>
       <li><a href="/#experience">Experience</a></li>
-      <li><a href="/contact" style="color:var(--accent)">Contact</a></li>
+      <li><a href="/contact" class="active">Contact</a></li>
     </ul>
+    <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+      <svg class="icon-menu" width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="3" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="3" y1="20" x2="21" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
   </nav>
 
-  <div class="contact-page">
+  <!-- Mobile nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <nav class="mobile-nav-links">
+      <a href="{{ url_for('main.index') }}#hero" class="mobile-nav-item">Home</a>
+      <a href="/#about"      class="mobile-nav-item">About</a>
+      <a href="/#skills"     class="mobile-nav-item">Skills</a>
+      <a href="/#projects"   class="mobile-nav-item">Work</a>
+      <a href="/#experience" class="mobile-nav-item">Experience</a>
+      <a href="/contact"     class="mobile-nav-item">Contact</a>
+    </nav>
+    <div class="mobile-nav-socials">
+      <a href="{{ data.github }}"   target="_blank">GitHub</a>
+      <a href="{{ data.linkedin }}" target="_blank">LinkedIn</a>
+      <a href="{{ data.twitter }}"  target="_blank">Twitter</a>
+    </div>
+  </div>
 
-    <!-- LEFT — Info panel -->
+  <!-- Contact page body -->
+  <div class="contact-page-wrap">
+
+    <!-- LEFT — Info -->
     <div class="cp-left">
-      <a href="/" class="cp-back">← Back to portfolio</a>
+      <a href="{{ url_for('main.index') }}" class="cp-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to portfolio
+      </a>
 
-      <h1 class="cp-heading">
-        Say<br><em>Hello.</em>
-      </h1>
+      <h1 class="cp-heading">Say<br><em>Hello.</em></h1>
 
       <p class="cp-sub">
-        Have a project in mind, a problem to solve, or just want to connect? Drop me a message and I'll reply within 24 hours.
+        Have a project in mind, a problem to solve, or just want to connect?
+        Drop me a message — I'll reply within 24 hours.
       </p>
 
       <div class="cp-info-row">
-        <span class="cp-info-label">Email</span>
-        <span class="cp-info-val">{{ data.email }}</span>
+        <div class="cp-info-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="cp-info-inner">
+          <span class="cp-info-label">Email</span>
+          <span class="cp-info-val"><a href="mailto:{{ data.email }}">{{ data.email }}</a></span>
+        </div>
       </div>
+
       <div class="cp-info-row">
-        <span class="cp-info-label">Location</span>
-        <span class="cp-info-val">{{ data.location }}</span>
+        <div class="cp-info-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.6 9.77a19.72 19.72 0 01-3.07-8.67A2 2 0 012.51 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 8.5a16 16 0 006.29 6.29l.87-.87a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="cp-info-inner">
+          <span class="cp-info-label">Phone</span>
+          <span class="cp-info-val">{{ data.details.mobile }}</span>
+        </div>
       </div>
+
       <div class="cp-info-row">
-        <span class="cp-info-label">Status</span>
-        <span class="cp-info-val" style="color:var(--accent)">● Available for work</span>
+        <div class="cp-info-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="cp-info-inner">
+          <span class="cp-info-label">Location</span>
+          <span class="cp-info-val">{{ data.location }}</span>
+        </div>
       </div>
+
+      <div class="cp-info-row">
+        <div class="cp-info-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="3" stroke="var(--teal)" stroke-width="1.5"/>
+            <circle cx="12" cy="12" r="8" stroke="var(--teal)" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="cp-info-inner">
+          <span class="cp-info-label">Status</span>
+          <span class="cp-info-val" style="color:var(--teal)">{{ data.details.available }}</span>
+        </div>
+      </div>
+
+
     </div>
 
     <!-- RIGHT — Form -->
     <div class="cp-right">
+      <div class="form-title">Send a Message</div>
 
-      <!-- Flash messages -->
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           <ul class="flash-list">
@@ -253,48 +300,47 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="name">Your Name</label>
-            <input
-              class="form-input"
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Name"
-              value="{{ form_data.name if form_data else '' }}"
-              required
-            >
+            <input class="form-input" type="text" id="name" name="name"
+              placeholder="Full name"
+              value="{{ form_data.name if form_data else '' }}" required>
           </div>
           <div class="form-group">
             <label class="form-label" for="email">Email Address</label>
-            <input
-              class="form-input"
-              type="email"
-              id="email"
-              name="email"
-              placeholder="yourgmail@example.com"
-              value="{{ form_data.email if form_data else '' }}"
-              required
-            >
+            <input class="form-input" type="email" id="email" name="email"
+              placeholder="you@example.com"
+              value="{{ form_data.email if form_data else '' }}" required>
           </div>
         </div>
-
         <div class="form-group">
-          <label class="form-label" for="message">Message</label>
-          <textarea
-            class="form-textarea"
-            id="message"
-            name="message"
-            placeholder="Tell me about your project or just say hi..."
-            required
-          >{{ form_data.message if form_data else '' }}</textarea>
+          <label class="form-label" for="subject">Subject</label>
+          <input class="form-input" type="text" id="subject" name="subject"
+            placeholder="What is this about?"
+            value="{{ form_data.subject if form_data else '' }}">
         </div>
-
+        <div class="form-group">
+          <label class="form-label" for="message">Your Message</label>
+          <textarea class="form-textarea" id="message" name="message"
+            placeholder="Tell me about your project or just say hi…"
+            required>{{ form_data.message if form_data else '' }}</textarea>
+        </div>
         <button type="submit" class="btn-send">
-          Send Message &nbsp; →
+          Send Message
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
       </form>
-
     </div>
   </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-bar">
+      <span class="footer-copy">
+         Copyright &copy; {{ data.name }} 2026
+      </span>
+    </div>
+  </footer>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>

@@ -5,281 +5,751 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ data.name }} — Portfolio</title>
   <meta name="description" content="{{ data.tagline }}">
+  <!-- Favicon: Code brackets monogram -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2306060c'/%3E%3Cpath d='M11 10L6 16l5 6' stroke='%2300E5FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M21 10l5 6-5 6' stroke='%23BF5FFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M18 9l-4 14' stroke='%23FF4D8D' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <!-- LOADER -->
   <div id="loader">
-    <div class="loader-counter">00</div>
-    <div class="loader-bar-wrap">
-      <div class="loader-bar"></div>
+    <div class="loader-emblem">
+      <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="40" cy="40" r="36" stroke="rgba(0,229,255,0.12)" stroke-width="1"/>
+        <circle cx="40" cy="40" r="36" stroke="url(#lg1)" stroke-width="1" stroke-dasharray="5 4" stroke-linecap="round"/>
+        <rect x="38" y="2" width="4" height="4" fill="#00E5FF" transform="rotate(45 40 4)"/>
+        <rect x="38" y="74" width="4" height="4" fill="#BF5FFF" transform="rotate(45 40 76)"/>
+        <defs>
+          <linearGradient id="lg1" x1="0" y1="0" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#00E5FF"/><stop offset=".5" stop-color="#BF5FFF"/>
+            <stop offset="1" stop-color="#FF4D8D" stop-opacity=".3"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="loader-emblem-center">
+        <span style="background:linear-gradient(135deg,#00E5FF,#BF5FFF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.04em;">{{ data.name.split()[0][0] }}{{ data.name.split()[1][0] }}</span>
+      </div>
     </div>
-    <div class="loader-text">Initializing Portfolio</div>
+    <div class="loader-counter">00</div>
+    <div class="loader-track"><div class="loader-bar"></div></div>
+    <div class="loader-label">Loading Portfolio</div>
   </div>
 
   <!-- NAVIGATION -->
-  <nav>
-    <a href="#hero" class="nav-logo">
-      {{ data.name.split()[0][0] }}{{ data.name.split()[1][0] }}.dev
+  <nav id="navbar">
+    <a href="{{ url_for('main.index') }}#hero" class="nav-logo">
+      <span class="nav-logo-dot"></span>
+      {{ data.name.split()[0][0] }}{{ data.name.split()[1][0] }}<span style="color:var(--cyan);opacity:.5">.dev</span>
     </a>
     <ul class="nav-links">
+      <!-- Home button with house icon -->
+      <li>
+        <a href="{{ url_for('main.index') }}#hero" class="nav-home-btn active" aria-label="Home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 21V12h6v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </li>
       <li><a href="#about">About</a></li>
-      <li><a href="#projects">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="/projects">Projects</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="/contact">Contact</a></li>
     </ul>
-    <!-- Hamburger button (mobile only) -->
     <button class="nav-hamburger" id="hamburger" aria-label="Menu">
-  <!-- Hamburger icon -->
-  <svg class="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none">
-    <line x1="3" y1="6"  x2="21" y2="6"  stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="3" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-  </svg>
-  <!-- X close icon -->
-  <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none;">
-    <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="20" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-  </svg>
-</button>
+      <svg class="icon-menu" width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="3" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="3" y1="20" x2="21" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
   </nav>
 
-  <!-- Mobile nav drawer -->
-<div class="mobile-nav" id="mobileNav">
-  <!-- Close button inside drawer -->
-  <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-      <line x1="4" y1="4" x2="20" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      <line x1="20" y1="4" x2="4" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>
-  </button>
-
-  <nav class="mobile-nav-links">
-    <a href="/#about"      class="mobile-nav-item" id="mnAbout">About</a>
-    <a href="/#projects"   class="mobile-nav-item" id="mnWork">Work</a>
-    <a href="/#experience" class="mobile-nav-item" id="mnExp">Experience</a>
-    <a href="/contact"     class="mobile-nav-item" id="mnContact">Contact</a>
-  </nav>
-
-  <!-- Bottom socials -->
-  <div class="mobile-nav-socials">
-    <a href="{{ data.github }}"   target="_blank">GitHub</a>
-    <a href="{{ data.linkedin }}" target="_blank">LinkedIn</a>
-    <a href="{{ data.twitter }}"  target="_blank">Twitter</a>
+  <!-- Mobile nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <nav class="mobile-nav-links">
+      <a href="{{ url_for('main.index') }}#hero" class="mobile-nav-item">Home</a>
+      <a href="/#about"      class="mobile-nav-item">About</a>
+      <a href="/#skills"     class="mobile-nav-item">Skills</a>
+      <a href="/projects" class="mobile-nav-item">Projects</a>
+      <a href="/#experience" class="mobile-nav-item">Experience</a>
+      <a href="/contact"     class="mobile-nav-item">Contact</a>
+    </nav>
+    <div class="mobile-nav-socials">
+      <a href="{{ data.github }}"   target="_blank">GitHub</a>
+      <a href="{{ data.linkedin }}" target="_blank">LinkedIn</a>
+      <a href="{{ data.twitter }}"  target="_blank">Twitter</a>
+    </div>
   </div>
-</div>
-  </nav>
 
-  <!-- HERO -->
+  <!-- ══════════════════════════════════════════
+       HERO
+       ══════════════════════════════════════════ -->
   <section id="hero">
-
     <div class="hero-bg-number">{{ data.name.split()[0][0] }}</div>
+    <div class="hero-left">
+      <div class="hero-tagline">
+        <span class="tagline-dot"></span>
+        Available for projects
+        <span class="tagline-sep">◆</span>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" style="opacity:.7">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+        {{ data.location }}
+      </div>
 
-<div class="hero-left">
+      <div class="hero-name-row">
+        <h1 class="hero-name">
+          <span class="line"><span>{{ data.name.split()[0] }}</span></span>
+          <span class="line"><span>{{ data.name.split()[1] }}</span></span>
+        </h1>
+        <div class="profile-avatar">
+          <div class="profile-avatar-inner">
+            <img src="{{ url_for('static', filename='img/fedrick.jpg') }}" alt="{{ data.name }}" class="profile-avatar-img">
+          </div>
+          <!-- Decorative tick-marks ring -->
+          <div class="profile-avatar-ring">
+            <svg viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="130" cy="130" r="125" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="2 8"/>
+              <rect x="128" y="3" width="4" height="4" fill="white" opacity=".6" transform="rotate(45 130 5)"/>
+              <rect x="128" y="253" width="4" height="4" fill="white" opacity=".6" transform="rotate(45 130 255)"/>
+            </svg>
+          </div>
+        </div>
+      </div>
 
-  <!-- Tagline FIRST -->
-<div class="hero-tagline">
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/>
-    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2 2"/>
-  </svg>
-  Available for projects
-  <span class="tagline-divider">✦</span>
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-    <circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
-  </svg>
-  {{ data.location }}
-</div>
+      <p class="hero-subtitle">
+        <span class="typing-wrap">
+          <span class="typing-text">Developer</span>
+          <span class="typing-sep">
+            <span class="typing-sep-dot"></span>
+          </span>
+        </span>
+        <span class="hero-bio-text">{{ data.bio }}</span>
+      </p>
 
-  <!-- Name row: avatar beside name on desktop, avatar above on mobile -->
-  <div class="hero-name-row">
-    <h1 class="hero-name">
-      <span class="line"><span>{{ data.name.split()[0] }}</span></span>
-      <span class="line"><span><em>{{ data.name.split()[1] }}</em></span></span>
-    </h1>
-
-    <div class="profile-avatar">
-      <img
-        src="{{ url_for('static', filename='img/fedrick.jpg') }}"
-        alt="{{ data.name }}"
-        class="profile-avatar-img"
-      >
-      <div class="profile-avatar-ring"></div>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="/contact" class="btn-secondary">
+          Let's Talk
+          <span class="arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
     </div>
-  </div>
 
-  <p class="hero-subtitle">
-    <span class="typing-text">Developer</span> &mdash; {{ data.bio }}
-  </p>
-
-  <div class="hero-cta">
-    <a href="#projects" class="btn-primary">View My Work</a>
-    <a href="/contact" class="btn-secondary">
-      Let's Talk <span class="arrow">→</span>
-    </a>
-  </div>
-
-</div>
-
-    <!-- RIGHT -->
     <div class="hero-right">
+      <div class="motto-card">
+        <div class="motto-card-label">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Favourite Quote
+        </div>
+        <blockquote class="motto-quote">"{{ data.motto.quote }}"</blockquote>
+        <cite class="motto-author">— {{ data.motto.author }}</cite>
+      </div>
 
-  <!-- Motto / Fun Facts card -->
-  <div class="motto-card">
-<div class="motto-card-label">
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-    <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  Favourite Quote
-</div>  <blockquote class="motto-quote">
-    "{{ data.motto.quote }}"
-  </blockquote>
-  <cite class="motto-author">— {{ data.motto.author }}</cite>
-</div>
+      <div class="hero-stats">
+        <div class="hero-stats-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Quick Stats
+        </div>
+        <div class="stat-item"><span class="stat-num" data-target="1" data-suffix="+">0+</span><span class="stat-label">Years Exp.</span></div>
+        <div class="stat-item"><span class="stat-num" data-target="{{ data.all_projects|length }}" data-suffix="+">0+</span><span class="stat-label">Projects</span></div>
+        <div class="stat-item"><span class="stat-num" data-target="20" data-suffix="+">0+</span><span class="stat-label">Technologies</span></div>
+        <div class="stat-item"><span class="stat-num" data-target="100" data-suffix="%">0%</span><span class="stat-label">Dedication</span></div>
+      </div>
+    </div>
 
-  <!-- Quick Stats -->
-  <div class="hero-stats">
-<div class="hero-stats-title">
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-    <path d="M18 20V10M12 20V4M6 20v-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  </svg>
-  Quick Stats
-</div>    <div class="stat-item">
-      <span class="stat-num" data-target="1" data-suffix="+">0+</span>
-      <span class="stat-label">Years Exp.</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="{{ data.projects|length }}" data-suffix="+">0+</span>
-      <span class="stat-label">Projects</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="20" data-suffix="+">0+</span>
-      <span class="stat-label">Technologies</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="100" data-suffix="%">0%</span>
-      <span class="stat-label">Dedication</span>
-    </div>
-  </div>
-
-</div>
-
-    <!-- MARQUEE -->
     <div class="hero-marquee-wrap">
       <div class="hero-marquee">
-        {% set skills_flat = [] %}
-        {% for cat in data.skills %}
-          {% for item in cat.list %}
-            {% set _ = skills_flat.append(item) %}
-          {% endfor %}
-        {% endfor %}
-        {% for _ in range(3) %}
-          {% for skill in skills_flat %}
-            <span class="marquee-item">{{ skill }}</span>
+        {% set service_items = [
+          "Full-Stack Development",
+          "API Architecture",
+          "UI / UX Engineering",
+          "Performance Optimisation",
+          "AI Integration",
+          "Open Source",
+          "Cloud Deployment",
+          "Data Annotation",
+          "Responsive Design",
+          "System Design",
+          "Developer Tooling",
+          "SaaS Products"
+        ] %}
+        {% for _ in range(4) %}
+          {% for item in service_items %}
+            <span class="marquee-item">{{ item }}</span>
           {% endfor %}
         {% endfor %}
       </div>
     </div>
-
   </section>
 
-  <!-- ABOUT -->
+  <!-- ══════════════════════════════════════════
+       ABOUT  (no skills here)
+       ══════════════════════════════════════════ -->
   <section id="about">
     <div class="section-label" data-num="01">About Me</div>
     <div class="about-grid">
       <div class="about-text">
-        <h2 class="section-heading reveal">
-          Turning <em>Ideas</em><br>into Reality
-        </h2>
+        <h2 class="section-heading reveal">Turning <em>Ideas</em><br>into Reality</h2>
         <p class="reveal reveal-delay-1">
-          I'm <strong>{{ data.name }}</strong>, a {{ data.title }} 
-          who works at the intersection of engineering precision and creative vision, 
-          building solutions that are clean, scalable, and visually compelling.
+          I'm <strong>{{ data.name }}</strong>, a {{ data.title }} who works at the intersection
+          of engineering precision and creative vision, building solutions that are clean,
+          scalable, and visually compelling.
         </p>
         <p class="reveal reveal-delay-2">
-          I am passionate about blending code and design, with hands on experience
-           in freelance software development and data annotation. I focus on creating fast, 
-           accessible, and engaging digital experiences, from optimizing performance 
-           to crafting intuitive user interfaces, always maintaining strong attention to detail.
+          Passionate about blending code and design with hands-on experience in freelance
+          software development and data annotation. I focus on creating fast, accessible,
+          and engaging digital experiences — from optimising performance to crafting
+          intuitive user interfaces.
         </p>
         <p class="reveal reveal-delay-3">
-          I bring a balanced combination of analytical thinking and practical development skills to every project. 
-          Outside of work, I explore type design, photography, and contribute to open source, 
+          Outside of work I explore type design, photography, and open-source contribution,
           continuously expanding my creative and technical perspective.
         </p>
         <p class="reveal reveal-delay-4">
-          Driven to build impactful digital experiences by combining clean engineering, thoughtful design, 
-          and continuous innovation.
+          Driven to build impactful digital experiences by combining clean engineering,
+          thoughtful design, and a relentless pursuit of innovation.
         </p>
       </div>
+
       <div class="about-right">
+        <!-- Expanded personal details -->
+        <div class="details-box reveal">
+          <div class="details-box-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Personal Details
+          </div>
+          <div class="details-grid">
+            <div class="detail-row">
+              <span class="detail-key">Full Name</span>
+              <span class="detail-val">{{ data.name }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">HomeTown</span>
+              <span class="detail-val">{{ data.details.hometown }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Current City</span>
+              <span class="detail-val">{{ data.location }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Education</span>
+              <span class="detail-val">{{ data.details.education }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Role</span>
+              <span class="detail-val">{{ data.title }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Experience</span>
+              <span class="detail-val">1+ Years in Software Development</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Languages</span>
+              <span class="detail-val">{{ data.details.languages }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Email</span>
+              <span class="detail-val"><a href="mailto:{{ data.details.email }}">{{ data.details.email }}</a></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Phone</span>
+              <span class="detail-val">{{ data.details.mobile }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Interests</span>
+              <span class="detail-val">{{ data.details.interests }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Soft Skills</span>
+              <span class="detail-val">Problem Solving, Team Collaboration, Adaptability</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Work Style</span>
+              <span class="detail-val">
+                <span class="work-badge work-badge--active" title="Preferred">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Remote
+                </span>
+                <span class="work-badge">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Hybrid
+                </span>
+                <span class="work-badge">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  On-site
+                </span>
+              </span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Open Source</span>
+              <span class="detail-val">Active contributor — <a href="{{ data.github }}" target="_blank">GitHub ➡️</a></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-key">Available</span>
+              <span class="detail-val" style="color:var(--teal)">
+                <svg width="8" height="8" viewBox="0 0 8 8" style="display:inline-block;vertical-align:middle;margin-right:5px;">
+                  <circle cx="4" cy="4" r="3" fill="var(--teal)"/>
+                </svg>
+                {{ data.details.available }}
+              </span>
+            </div>
+          </div>
+        </div>
 
-  <!-- Personal details box — spans full width above skills -->
-  <div class="details-box reveal">
-    <div class="details-box-title">Personal Details</div>
-    <div class="details-grid">
-      <div class="detail-row">
-        <span class="detail-key">HomeTown</span>
-        <span class="detail-val">{{ data.details.hometown }}</span>
       </div>
-      <div class="detail-row">
-        <span class="detail-key">Education</span>
-        <span class="detail-val">{{ data.details.education }}</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-key">Languages</span>
-        <span class="detail-val">{{ data.details.languages }}</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-key">Interests</span>
-        <span class="detail-val">{{ data.details.interests }}</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-key">Email</span>
-        <span class="detail-val">{{ data.details.email }}</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-key">Mobile</span>
-        <span class="detail-val">{{ data.details.mobile }}</span>
-      </div>
-      <div class="detail-row">
-        <span class="detail-key">Available</span>
-        <span class="detail-val" style="color:var(--accent)">
-          ● {{ data.details.available }}
-        </span>
-      </div>
-    </div>
-  </div>
 
-  <!-- Skills grid below -->
-  <div class="skills-grid reveal reveal-delay-1">
-    {% for skill_cat in data.skills %}
-    <div class="skill-block">
-      <div class="skill-cat">{{ skill_cat.category }}</div>
-      <div class="skill-tags">
-        {% for item in skill_cat.list %}
-        <span class="skill-tag">{{ item }}</span>
-        {% endfor %}
       </div>
-    </div>
-    {% endfor %}
-  </div>
-
-</div>
     </div>
   </section>
 
-  <!-- PROJECTS -->
+  <!-- ══════════════════════════════════════════
+       SKILLS  (standalone section — official logos, pill rows)
+       ══════════════════════════════════════════ -->
+  <section id="skills">
+    <div class="section-label" data-num="02">Skills &amp; Technologies</div>
+    <h2 class="section-heading reveal">My <em>Arsenal</em></h2>
+    <p class="skills-intro reveal reveal-delay-1">
+      A curated toolkit forged across real products. Hover any skill to explore.
+      Filter by discipline below.
+    </p>
+
+    <div class="skills-filter reveal reveal-delay-2">
+      <button class="filter-btn active" data-filter="All">All</button>
+      <button class="filter-btn" data-filter="Frontend">Frontend</button>
+      <button class="filter-btn" data-filter="Backend">Backend</button>
+      <button class="filter-btn" data-filter="Tools">Tools</button>
+      <button class="filter-btn" data-filter="Concepts">Concepts</button>
+    </div>
+
+    <!-- FRONTEND ROW -->
+    <div class="skills-category-row reveal" data-cat="Frontend">
+      <div class="skills-category-header">
+        <span class="skills-category-name">Frontend</span>
+        <div class="skills-category-line"></div>
+      </div>
+      <div class="skills-track">
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="React">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">React</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/typescript/typescript-original.svg" alt="TypeScript">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">TypeScript</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nextjs/nextjs-original.svg" alt="Next.js" style="filter:invert(1) brightness(2)">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Next.js</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/threejs/threejs-original.svg" alt="Three.js" style="filter:invert(1) brightness(2)">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Three.js</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" alt="Tailwind CSS">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Tailwind CSS</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="HTML5">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">HTML5</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="CSS3">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">CSS3</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" alt="JavaScript">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">JavaScript</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- BACKEND ROW -->
+    <div class="skills-category-row reveal reveal-delay-1" data-cat="Backend">
+      <div class="skills-category-header">
+        <span class="skills-category-name">Backend</span>
+        <div class="skills-category-line"></div>
+      </div>
+      <div class="skills-track">
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Python</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flask/flask-original.svg" alt="Flask" style="filter:invert(1) brightness(2)">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Flask</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/fastapi/fastapi-original.svg" alt="FastAPI">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">FastAPI</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" alt="Node.js">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Node.js</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" alt="PostgreSQL">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">PostgreSQL</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/redis/redis-original.svg" alt="Redis">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Redis</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" alt="MongoDB">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">MongoDB</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TOOLS ROW -->
+    <div class="skills-category-row reveal reveal-delay-2" data-cat="Tools">
+      <div class="skills-category-header">
+        <span class="skills-category-name">Tools</span>
+        <div class="skills-category-line"></div>
+      </div>
+      <div class="skills-track">
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-original.svg" alt="Docker">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Docker</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="AWS">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">AWS</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" alt="Git">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Git</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="GitHub" style="filter:invert(1) brightness(2)">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">GitHub</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg" alt="Figma">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Figma</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="Linux">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Linux</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg" alt="VS Code">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">VS Code</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postman/postman-original.svg" alt="Postman">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Postman</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CONCEPTS ROW -->
+    <div class="skills-category-row reveal reveal-delay-3" data-cat="Concepts">
+      <div class="skills-category-header">
+        <span class="skills-category-name">Concepts</span>
+        <div class="skills-category-line"></div>
+      </div>
+      <div class="skills-track">
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/swagger/swagger-original.svg" alt="REST APIs">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">REST APIs</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/githubactions/githubactions-original.svg" alt="CI/CD">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">CI / CD</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/jira/jira-original.svg" alt="Agile">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Agile / Scrum</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tensorflow/tensorflow-original.svg" alt="ML">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Machine Learning</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/graphql/graphql-plain.svg" alt="GraphQL">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">GraphQL</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="skill-pill">
+          <div class="skill-pill-icon">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/kubernetes/kubernetes-original.svg" alt="Kubernetes">
+          </div>
+          <div class="skill-pill-info">
+            <span class="skill-pill-name">Kubernetes</span>
+            <div class="skill-pill-level">
+              <span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip filled"></span><span class="skill-pip"></span><span class="skill-pip"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PROJECTS
+       ══════════════════════════════════════════ -->
   <section id="projects">
-    <div class="section-label" data-num="02">Selected Work</div>
-    <h2 class="section-heading reveal">
-      Projects That<br><em>Matter</em>
-    </h2>
+    <div class="section-label" data-num="03">Selected Work</div>
+    <h2 class="section-heading reveal">Projects That<br><em>Matter</em></h2>
     <div class="projects-list">
       {% for project in data.projects %}
       <a href="{{ project.link }}" class="project-item reveal">
@@ -291,34 +761,40 @@
           </div>
           <p class="project-desc">{{ project.description }}</p>
           <div class="project-tech">
-            {% for tech in project.tech %}
-            <span class="tech-tag">{{ tech }}</span>
-            {% endfor %}
+            {% for tech in project.tech %}<span class="tech-tag">{{ tech }}</span>{% endfor %}
           </div>
         </div>
         <div class="project-right">
-          <div class="project-color-dot" style="background:{{ project.color }}"></div>
+          <div class="project-color-dot" style="background:{{ project.color }};box-shadow:0 0 10px {{ project.color }}88"></div>
           <span class="project-year">{{ project.year }}</span>
-          <div class="project-arrow">↗</div>
+          <div class="project-arrow"><span>↗</span></div>
         </div>
       </a>
       {% endfor %}
     </div>
+  <div class="projects-cta">
+    <a href="/projects" class="btn-outline">View All 22+ Projects ↗</a>
+  </div>
   </section>
 
-  <!-- EXPERIENCE -->
+  <!-- ══════════════════════════════════════════
+       EXPERIENCE
+       ══════════════════════════════════════════ -->
   <section id="experience">
-    <div class="section-label" data-num="03">Experience</div>
-    <h2 class="section-heading reveal">
-      Where I've<br><em>Worked</em>
-    </h2>
+    <div class="section-label" data-num="04">Experience</div>
+    <h2 class="section-heading reveal">Where I've<br><em>Worked</em></h2>
     <div class="experience-list">
       {% for exp in data.experience %}
       <div class="exp-item reveal">
         <div class="exp-period">{{ exp.period }}</div>
         <div class="exp-content">
           <div class="exp-role">{{ exp.role }}</div>
-          <div class="exp-company">{{ exp.company }}</div>
+          <div class="exp-company">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+            </svg>
+            {{ exp.company }}
+          </div>
           <p class="exp-desc">{{ exp.desc }}</p>
         </div>
       </div>
@@ -326,56 +802,36 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
+  <!-- ══════════════════════════════════════════
+       CONTACT CTA
+       ══════════════════════════════════════════ -->
   <section id="contact">
-    <div class="section-label" data-num="04">Contact</div>
+    <div class="section-label" data-num="05">Contact</div>
     <h2 class="contact-heading reveal">
       <span class="line1">Let's Build</span>
       <span class="line2">Something.</span>
     </h2>
     <p class="reveal reveal-delay-1"
-       style="color:var(--text-muted);font-style:italic;max-width:400px;
-              margin:0 auto 40px;text-align:center;">
+       style="font-family:var(--font-serif);color:var(--text-muted);font-style:italic;
+              max-width:400px;margin:0 auto 40px;text-align:center;font-size:1.1rem;line-height:1.7;">
       Have a project in mind? A problem to solve? Or just want to say hi?
     </p>
-    <a href="/contact" class="btn-primary reveal reveal-delay-2"
-       style="display:inline-block;">
-      Contact Me
-    </a>
+    <a href="/contact" class="btn-primary reveal reveal-delay-2" style="display:inline-block;">Contact Me</a>
     <ul class="contact-socials reveal reveal-delay-3">
-  <!-- GitHub -->
-  <li>
-    <a href="{{ data.github }}" target="_blank" class="social-icon-link" aria-label="GitHub">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z" fill="currentColor"/>
-      </svg>
-    </a>
-  </li>
-  <!-- LinkedIn -->
-  <li>
-    <a href="{{ data.linkedin }}" target="_blank" class="social-icon-link" aria-label="LinkedIn">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" fill="currentColor"/>
-      </svg>
-    </a>
-  </li>
-  <!-- X / Twitter -->
-  <li>
-    <a href="{{ data.twitter }}" target="_blank" class="social-icon-link" aria-label="X (Twitter)">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L2.002 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" fill="currentColor"/>
-      </svg>
-    </a>
-  </li>
-</ul>
+      <li><a href="{{ data.github }}"   target="_blank" class="social-icon-link" aria-label="GitHub"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.604-3.369-1.341-3.369-1.341-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.564 9.564 0 0112 6.844a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg></a></li>
+      <li><a href="{{ data.linkedin }}" target="_blank" class="social-icon-link" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+      <li><a href="{{ data.twitter }}"  target="_blank" class="social-icon-link" aria-label="Twitter"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L2.002 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg></a></li>
+    </ul>
   </section>
 
   <!-- FOOTER -->
-  <footer>
-    <span class="footer-copy">&copy; 2026 {{ data.name }}. Crafted with precision.</span>
-    <span class="footer-right">Creative Developer</span>
+ <footer class="site-footer">
+    <div class="footer-bar">
+      <span class="footer-copy">
+        Copyright &copy; {{ data.name }} 2026
+      </span>
+    </div>
   </footer>
-
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
